@@ -2,6 +2,24 @@
 
 This package allows you to control any device running [Balena OS](https://www.balena.io) from your local network. It exposes an API which allows you to trigger different actions.
 
+### Usage
+
+Add the `balenablocks/control` as `services` to your ```docker-compose.yml```.
+
+```yml
+version: '2.1'
+services:
+  balena-control:
+    image: balenablocks/control
+    restart: always
+    privileged: true
+    ports:
+      - 3009:3009
+    environment:
+      # Environment variables
+      - DISPLAY=:0
+```
+
 ### Configuration ⚙️
 
 Out of the box there is no need for a configuration, but it is possible to override the default values.
@@ -40,6 +58,9 @@ GET http://XXX.XXX.XXX.XXX:3009/status
 ### Shutdown computer 📴
 
 Shuts down the computer. WARNING: This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers.
+
+> [!WARNING]  
+> This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers.
 
 ```
 POST http://XXX.XXX.XXX.XXX:3009/shutdown
@@ -95,4 +116,23 @@ POST http://XXX.XXX.XXX.XXX:3009/display
   "display": "off",
   ...
 }
+```
+
+### Development
+
+The application uses a small node.js (express) application.
+
+```
+npm run install
+```
+
+Run the development
+```
+npm run dev
+```
+
+Run the development without actually triggering shutdown, etc.
+
+```
+npm run dev:dry
 ```
