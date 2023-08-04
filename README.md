@@ -57,10 +57,10 @@ GET http://XXX.XXX.XXX.XXX:3009/status
 
 ### Shutdown computer 📴
 
-Shuts down the computer. WARNING: This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers.
-
 > [!WARNING]  
 > This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers.
+
+Shuts down the computer.
 
 ```
 POST http://XXX.XXX.XXX.XXX:3009/shutdown
