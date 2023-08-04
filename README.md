@@ -1,8 +1,8 @@
-# balena-control
+# balena-control 🖥️
 
 This package allows you to control any device running [Balena OS](https://www.balena.io) from your local network. It exposes an API which allows you to trigger different actions.
 
-### Configuration
+### Configuration ⚙️
 
 Out of the box there is no need for a configuration, but it is possible to override the default values.
 
@@ -18,6 +18,9 @@ The request is similar to WOL not encrypted or secured. Make sure it only runs i
 BALENA_CONTROL_TOKEN=random_string
 ```
 
+## Control
+
+`http://XXX.XXX.XXX.XXX:3009` is the local IP adress of your device. `3009` is the default port `balena-control` is running on.
 
 ### Get status
 
@@ -30,11 +33,13 @@ GET http://XXX.XXX.XXX.XXX:3009/status
 ```json
 {
   "status": "online",
-  "display: "active"
+  "display": "active"
 }
 ```
 
-### Shutdown computer
+### Shutdown computer 📴
+
+Shuts down the computer. WARNING: This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers.
 
 ```
 POST http://XXX.XXX.XXX.XXX:3009/shutdown
@@ -45,7 +50,7 @@ POST http://XXX.XXX.XXX.XXX:3009/shutdown
 ```json
 {
   "status": "prepare-shutdown",
-  "display: "active"
+  "display": "active"
 }
 ```
 
@@ -65,11 +70,23 @@ POST http://XXX.XXX.XXX.XXX:3009/sleep
 }
 ```
 
-### Display
+### Display 📺
+
+Use this to change the configuration of the display.
 
 ```
 POST http://XXX.XXX.XXX.XXX:3009/display
 ```
+
+```json
+[{
+  "display": 0,
+  "status": "off"
+}]
+```
+
+`display` the ID of the display
+`status` allows `on` and `off`
 
 #### Returns
 
