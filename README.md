@@ -4,20 +4,19 @@ This package allows you to control any device running [Balena OS](https://www.ba
 
 ### Usage
 
-Add the `balenablocks/control` as `services` to your ```docker-compose.yml```.
+Add `balena-control` as `services` to your `docker-compose.yml`.
 
 ```yml
-version: '2.1'
+version: "2.1"
 services:
   balena-control:
-    image: balenablocks/control
+    build: .
     restart: always
     privileged: true
     ports:
       - 3009:3009
     environment:
-      # Environment variables
-      - DISPLAY=:0
+      - BALENA_CONTROL_PORT=3009
 ```
 
 ### Configuration ⚙️
@@ -30,7 +29,7 @@ BALENA_CONTROL_PORT=3009
 
 ### Security 🔒
 
-The request is similar to WOL not encrypted or secured. Make sure it only runs inside a private network. You can have a minor 
+The request is similar to WOL not encrypted or secured. Make sure it only runs inside a private network. You can have a minor
 
 ```
 BALENA_CONTROL_TOKEN=random_string
@@ -39,6 +38,17 @@ BALENA_CONTROL_TOKEN=random_string
 ## Control
 
 `http://XXX.XXX.XXX.XXX:3009` is the local IP adress of your device. `3009` is the default port `balena-control` is running on.
+All Responses have the general structure to verify if the response is a success:
+
+```json
+{
+  success: true,
+  _error: null,
+  data: {...}
+}
+```
+
+The Return value describes the `data` property
 
 ### Get status
 
@@ -81,7 +91,6 @@ POST http://XXX.XXX.XXX.XXX:3009/shutdown
 POST http://XXX.XXX.XXX.XXX:3009/sleep
 ```
 
-
 #### Returns
 
 ```json
@@ -100,10 +109,12 @@ POST http://XXX.XXX.XXX.XXX:3009/display
 ```
 
 ```json
-[{
-  "display": 0,
-  "status": "off"
-}]
+[
+  {
+    "display": 0,
+    "status": "off"
+  }
+]
 ```
 
 `display` the ID of the display
@@ -127,6 +138,7 @@ npm run install
 ```
 
 Run the development
+
 ```
 npm run dev
 ```

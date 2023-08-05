@@ -1,0 +1,22 @@
+version: "2.1"
+volumes:
+  data-store: {}
+services:
+  balena-control:
+    build: .
+    restart: always
+    privileged: true
+    ports:
+      - 3009:3009
+    volumes:
+      - "data-store:/usr/src/app/drive"
+    environment:
+      # Environment variables
+      - BALENA_CONTROL_PORT=3009
+      - DEBUG="false"
+      - DISPLAY_COUNT=1
+    labels:
+      io.resin.features.dbus: "1"
+      io.resin.features.kernel-modules: "1"
+      io.resin.features.firmware: "1"
+      io.balena.features.supervisor-api: "1"

@@ -1,0 +1,19 @@
+{
+  "name": "balena-unipi",
+  "version": "1.0.0",
+  "description": "UniPi Server Websocket",
+  "main": "server.js",
+  "scripts": {
+    "deploy": "balena push pipi",
+    "deploy:dev": "balena push inteltest"
+  },
+  "author": "Daniel",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}
