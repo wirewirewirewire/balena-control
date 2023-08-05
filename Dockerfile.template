@@ -4,6 +4,7 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-debian-node:${NODEJS_VERSION}-bullseye-ru
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	build-essential \
 	rsync \
+	ddcutil \
 	dbus && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 

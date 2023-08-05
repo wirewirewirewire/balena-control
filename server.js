@@ -17,7 +17,6 @@ var RUN_DRY = false;
 var PORT = process.env.BALENA_CONTROL_PORT || 3009;
 var TOKEN = process.env.BALENA_CONTROL_TOKEN || undefined;
 var DISPLAY_COUNT = process.env.BALENA_DISPLAY_COUNT || 1;
-var DISPLAY_COUNT = process.env.BALENA_DISPLAY_COUNT || 1;
 
 // configuration ===============================================================
 console.log("[Server] Start API Server");

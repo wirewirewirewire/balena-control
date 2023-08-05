@@ -1,8 +1,14 @@
 var control = require("./hwcontrol");
 
+control.init();
+
 module.exports = function (app) {
   app.get("/status", async function (req, res) {
-    res.send({ success: true, _error: null, data: {} });
+    var balenaData = await control.getBalenaData();
+    var screenData = await control.getMonitorStatus();
+    var speep;
+    var display; //on,off,mixed
+    res.send({ success: true, _error: null, data: { balenaData, screenData } });
   });
   app.get("/status", async function (req, res) {
     res.send({ success: true, _error: null, data: {} });
