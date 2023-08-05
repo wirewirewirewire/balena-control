@@ -4,6 +4,7 @@
   "description": "UniPi Server Websocket",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "deploy": "balena push pipi",
     "deploy:dev": "balena push inteltest"
   },

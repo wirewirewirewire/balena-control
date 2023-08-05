@@ -10,11 +10,6 @@ services:
       - 3009:3009
     volumes:
       - "data-store:/usr/src/app/drive"
-    environment:
-      # Environment variables
-      - BALENA_CONTROL_PORT=3009
-      - DEBUG="false"
-      - DISPLAY_COUNT=1
     labels:
       io.resin.features.dbus: "1"
       io.resin.features.kernel-modules: "1"
