@@ -58,9 +58,9 @@ function getBalenaRelease() {
 }
 
 module.exports = {
-  init: function () {},
+  init: function () { },
 
-  setScreenPower: async function (powerState, screenNumber = 0) {
+  setScreenPower: async function (powerState, screenNumber = 0, ddc = false) {
     return new Promise(async (resolve, reject) => {
       //DISPLAY=:0 xset dpms force off
       monitorStates = {
@@ -97,10 +97,12 @@ module.exports = {
         xSetResult["dp"] = xSetResult.error
         xSetResult["hdmi"] = xSetResult2.error
       }
-
-      let ddcSetResult = await execAwait("ddcutil setvcp --display " + ddcNumber + " D6 " + setPowerState);
-      if (ddcSetResult.error == undefined) ddcSetResult = "ok";
-      else ddcSetResult = ddcSetResult.error;
+      let ddcSetResult
+      if (ddc) {
+        ddcSetResult = await execAwait("ddcutil setvcp --display " + ddcNumber + " D6 " + setPowerState);
+        if (ddcSetResult.error == undefined) ddcSetResult = "ok";
+        else ddcSetResult = ddcSetResult.error;
+      }
       resolve({ xSetResult, ddcSetResult });
     });
   },
@@ -165,7 +167,7 @@ module.exports = {
       let ddcResult = await execAwait("ddcutil capabilities")
       let xResult = await execAwait("DISPLAY=:0 xrandr -q")
 
-      resolve(ddcResult,xResult)
+      resolve({ddcResult: ddcResult.data, xResult:xResult.data})
     });
   },
 

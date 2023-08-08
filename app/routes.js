@@ -40,7 +40,13 @@ module.exports = function (app) {
     var result = [];
     for (var i = 0; i < req.body.length; i++) {
       let data = req.body[i];
-      let funcResult = await control.setScreenPower(data.status, data.display);
+      let ddc = false
+      if (req.body[i].hasOwnProperty("ddc")) {
+        if (req.body[i].ddc === true || req.body[i].ddc == "true") {
+        ddc = true
+        }
+    }
+      let funcResult = await control.setScreenPower(data.status, data.display, ddc);
       result.push({ display: i, data: funcResult });
     }
     //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
