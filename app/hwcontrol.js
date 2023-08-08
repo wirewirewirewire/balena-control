@@ -58,7 +58,7 @@ function getBalenaRelease() {
 }
 
 module.exports = {
-  init: function () { },
+  init: function () {},
 
   setScreenPower: async function (powerState, screenNumber = 0, ddc = false) {
     return new Promise(async (resolve, reject) => {
@@ -89,15 +89,14 @@ module.exports = {
       let xSetResult = await execAwait("DISPLAY=:0 xrandr --output DisplayPort-" + ddcNumber + " --" + setXState);
       let xSetResult2 = await execAwait("DISPLAY=:0 xrandr --output HDMI-" + ddcNumber + " --" + setXState);
 
-
       // let xSetResult = await execAwait("DISPLAY=:0 xset dpms force " + setXState);
       if (xSetResult.error == undefined || xSetResult2.error == undefined) xSetResult = "ok";
       else {
         xSetResult = {};
-        xSetResult["dp"] = xSetResult.error
-        xSetResult["hdmi"] = xSetResult2.error
+        xSetResult["dp"] = xSetResult.error;
+        xSetResult["hdmi"] = xSetResult2.error;
       }
-      let ddcSetResult
+      let ddcSetResult;
       if (ddc) {
         ddcSetResult = await execAwait("ddcutil setvcp --display " + ddcNumber + " D6 " + setPowerState);
         if (ddcSetResult.error == undefined) ddcSetResult = "ok";
@@ -164,10 +163,20 @@ module.exports = {
   },
   getMonitorStatus: async function () {
     return new Promise(async (resolve, reject) => {
-      let ddcResult = await execAwait("ddcutil capabilities")
-      let xResult = await execAwait("DISPLAY=:0 xrandr -q")
+      let ddcResult = await execAwait("ddcutil capabilities");
+      let xResult = await execAwait("DISPLAY=:0 xrandr -q");
 
-      resolve({ddcResult: ddcResult.data, xResult:xResult.data})
+      resolve({ ddcResult: ddcResult.data, xResult: xResult.data });
+    });
+  },
+  getDisplayPing: async function (displayNumber = 0) {
+    return new Promise(async (resolve, reject) => {
+      let pingResult = await execAwait("ddcutil -d " + displayNumber + " getvcp 10");
+      if (pingResult.error == undefined) pingResult = "ok";
+      else pingResult = "offline";
+      console.log(pingResult);
+
+      resolve(pingResult);
     });
   },
 

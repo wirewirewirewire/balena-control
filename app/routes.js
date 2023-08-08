@@ -34,18 +34,31 @@ module.exports = function (app) {
     //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
     res.send({ success: true, error: null, data: { status } });
   });
+
+  app.get("/display", async function (req, res) {
+    if (DEBUG) console.log("[API] get display");
+    if (DEBUG) console.log(req.body);
+    var result = [];
+    for (var i = 0; i < 4; i++) {
+      let data = req.body[i];
+      let status = await control.getDisplayPing(i);
+      result.push({ display: i, data: status });
+    }
+    //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
+    res.send({ success: true, error: null, data: result });
+  });
   app.post("/display", async function (req, res) {
     if (DEBUG) console.log("[API] post display");
     if (DEBUG) console.log(req.body);
     var result = [];
     for (var i = 0; i < req.body.length; i++) {
       let data = req.body[i];
-      let ddc = false
+      let ddc = false;
       if (req.body[i].hasOwnProperty("ddc")) {
         if (req.body[i].ddc === true || req.body[i].ddc == "true") {
-        ddc = true
+          ddc = true;
         }
-    }
+      }
       let funcResult = await control.setScreenPower(data.status, data.display, ddc);
       result.push({ display: i, data: funcResult });
     }
