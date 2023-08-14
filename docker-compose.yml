@@ -1,15 +1,19 @@
 version: "2.1"
 volumes:
-  data-store: {}
+  xserver:
 services:
   balena-control:
     build: .
     restart: always
     privileged: true
+    devices:
+      - /dev/dri
+    group_add:
+      - video
     ports:
       - 3009:3009
     volumes:
-      - "data-store:/usr/src/app/drive"
+      - "xserver:/tmp/.X11-unix"
     labels:
       io.resin.features.dbus: "1"
       io.resin.features.kernel-modules: "1"
