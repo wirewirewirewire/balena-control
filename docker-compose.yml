@@ -12,6 +12,8 @@ services:
       - video
     ports:
       - 3009:3009
+      - 3005:3005
+      - 80:80
     volumes:
       - "xserver:/tmp/.X11-unix"
     labels:

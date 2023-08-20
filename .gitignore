@@ -21,3 +21,4 @@ balena-downloader
 browser
 *.bak*
 package-lock.json
+server-screen.js
