@@ -129,6 +129,12 @@ POST http://XXX.XXX.XXX.XXX:3009/display
 }
 ```
 
+### Screenshot 📸
+
+Enable `public device url`. Make sure you also have [xserver](https://github.com/wirewirewirewire/xserver) running. This will allow you to get a screenshot of the application currently running on the public device url.
+
+TODO: Documentation for `XSERVER_PORT=80`
+
 ### Development
 
 The application uses a small node.js (express) application.
