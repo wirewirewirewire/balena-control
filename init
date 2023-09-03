@@ -6,11 +6,6 @@ DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket   dbus-send  
 sleep 1
 
 
-#sync the dev drive
-rm -r drive/* || true
-rsync -av -q ./* ./drive --exclude ./drive || true
-
-
 while true; do    
     echo "Running"
     npm run start

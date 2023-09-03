@@ -1,12 +1,38 @@
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
+const net = require("net");
 
 const { exec, spawn } = require("child_process");
 
 var DEBUG = process.env.DEBUG != "true" ? false : true;
+var BEAMER_IP = process.env.BEAMER_IP || "0.0.0.0";
+
+var beamerArray = [];
 
 const delay = (time) => new Promise((res) => setTimeout(res, time));
+
+function sendSerialProjector(stringSend, Address) {
+  return new Promise((resolve, reject) => {
+    const hexData = Buffer.from(stringSend, "hex");
+    console.log("[SERIAL] Sending data to target(" + Address + "): " + stringSend);
+    const client = net.createConnection({ host: Address, port: 23 }, () => {
+      if (DEBUG) console.log("[SERIAL] Connected to target.");
+      client.write(hexData);
+    });
+    client.on("data", (data) => {
+      client.end();
+    });
+    client.on("end", () => {
+      if (DEBUG) console.log("[SERIAL] Disconnected from target.");
+      resolve(true);
+    });
+    client.on("error", (err) => {
+      console.error("[SERIAL] Error:", err.message);
+      resolve(false);
+    });
+  });
+}
 
 function IsJsonString(str) {
   var result;
@@ -58,7 +84,10 @@ function getBalenaRelease() {
 }
 
 module.exports = {
-  init: function () {},
+  init: function () {
+    beamerArray = BEAMER_IP.split(",");
+    console.log("[INIT] Beamer defined: " + beamerArray);
+  },
 
   setScreenPower: async function (powerState, screenNumber = 0, ddc = false) {
     return new Promise(async (resolve, reject) => {
@@ -155,10 +184,40 @@ module.exports = {
       );
     });
   },
-  setBalenaSleep: async function (sleepTime) {
+  setBalenaSleep: async function () {
     //todo: add timeout as delay
-    return new Promise((resolve, reject) => {
-      resolve("not implemented now");
+    return new Promise(async (resolve, reject) => {
+      console.log(beamerArray);
+      for (let index = 0; index < beamerArray.length; index++) {
+        const element = beamerArray[index];
+        await sendSerialProjector("7E3030303020300D", element);
+      }
+      await execAwait("xset dpms force off");
+      for (let index = 0; index < 5; index++) {
+        await execAwait("DISPLAY=:0 xrandr --output DisplayPort-" + index + " --off");
+        await execAwait("DISPLAY=:0 xrandr --output HDMI-" + index + " --off");
+        await execAwait("ddcutil setvcp --display " + index + " D6 " + "03");
+      }
+
+      resolve("all devices sleeping");
+    });
+  },
+  setBalenaWake: async function () {
+    //todo: add timeout as delay
+    return new Promise(async (resolve, reject) => {
+      console.log(beamerArray);
+      for (let index = 0; index < beamerArray.length; index++) {
+        const element = beamerArray[index];
+        await sendSerialProjector("7E3030303020310D", element);
+      }
+      await execAwait("xset dpms force on");
+      for (let index = 0; index < 5; index++) {
+        await execAwait("DISPLAY=:0 xrandr --output DisplayPort-" + index + " --auto");
+        await execAwait("DISPLAY=:0 xrandr --output HDMI-" + index + " --auto");
+        await execAwait("ddcutil setvcp --display " + index + " D6 " + "01");
+      }
+
+      resolve("all devices awake");
     });
   },
   getMonitorStatus: async function () {

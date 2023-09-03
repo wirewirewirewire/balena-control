@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	build-essential \
 	rsync \
 	ddcutil \
+	cec-utils \
 	x11-xserver-utils \
 	scrot  \
 	dbus && \

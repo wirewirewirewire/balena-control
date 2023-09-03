@@ -29,8 +29,13 @@ module.exports = function (app) {
   });
   app.post("/sleep", async function (req, res) {
     if (DEBUG) console.log("[API] post sleep");
-    var sleepLength;
-    let status = await control.setBalenaSleep(sleepLength);
+    let status = await control.setBalenaSleep();
+    //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
+    res.send({ success: true, error: null, data: { status } });
+  });
+  app.post("/wake", async function (req, res) {
+    if (DEBUG) console.log("[API] post wake");
+    let status = await control.setBalenaWake();
     //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
     res.send({ success: true, error: null, data: { status } });
   });
