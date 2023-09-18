@@ -1,7 +1,5 @@
 var control = require("./hwcontrol");
 
-control.init();
-
 var DEBUG = true;
 
 module.exports = function (app) {

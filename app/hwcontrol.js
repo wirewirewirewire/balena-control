@@ -2,6 +2,7 @@ const fs = require("fs");
 const util = require("util");
 const path = require("path");
 const net = require("net");
+const PJLink = require("pjlink");
 
 const { exec, spawn } = require("child_process");
 
@@ -80,6 +81,34 @@ function getBalenaRelease() {
         resolve(IsJsonString(stdout));
       }
     );
+  });
+}
+
+function pjlinkSet(ip, command) {
+  return new Promise(async (resolve, reject) => {
+    const projector = new PJLink(ip, 4352);
+    if (command == "on") {
+      projector.powerOn(function (err) {
+        if (err) {
+          console.log("[PJLINK] error turning on", err);
+          resolve(false);
+          return;
+        }
+        console.log("[PJLINK] turned on: " + ip);
+        resolve(true);
+      });
+    }
+    if (command == "off") {
+      projector.powerOff(function (err) {
+        if (err) {
+          console.log("[PJLINK] error turning on", err);
+          resolve(false);
+          return;
+        }
+        console.log("[PJLINK] turned on: " + ip);
+        resolve(true);
+      });
+    }
   });
 }
 
@@ -190,7 +219,8 @@ module.exports = {
       console.log(beamerArray);
       for (let index = 0; index < beamerArray.length; index++) {
         const element = beamerArray[index];
-        await sendSerialProjector("7E3030303020300D", element);
+        //await sendSerialProjector("7E3030303020300D", element); //power off optoma
+        await pjlinkSet(element, "off");
       }
       await execAwait("xset dpms force off");
       for (let index = 0; index < 5; index++) {
@@ -208,7 +238,8 @@ module.exports = {
       console.log(beamerArray);
       for (let index = 0; index < beamerArray.length; index++) {
         const element = beamerArray[index];
-        await sendSerialProjector("7E3030303020310D", element);
+        //await sendSerialProjector("7E3030303020310D", element); //power on optoma
+        await pjlinkSet(element, "on");
       }
       await execAwait("xset dpms force on");
       for (let index = 0; index < 5; index++) {
@@ -216,6 +247,7 @@ module.exports = {
         await execAwait("DISPLAY=:0 xrandr --output HDMI-" + index + " --auto");
         await execAwait("ddcutil setvcp --display " + index + " D6 " + "01");
       }
+      await this.setBalenaRestart();
 
       resolve("all devices awake");
     });
@@ -226,6 +258,12 @@ module.exports = {
       let xResult = await execAwait("DISPLAY=:0 xrandr -q");
 
       resolve({ ddcResult: ddcResult.data, xResult: xResult.data });
+    });
+  },
+  getDisplayCount: async function () {
+    return new Promise(async (resolve, reject) => {
+      let displayCount = await execAwait("xrandr --query | grep ' connected' | wc -l | tr -d '\n'");
+      resolve(displayCount);
     });
   },
   getDisplayPing: async function (displayNumber = 0) {

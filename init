@@ -3,11 +3,16 @@
 export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket   dbus-send   --system   --print-reply   --dest=org.freedesktop.systemd1   /org/freedesktop/systemd1   org.freedesktop.systemd1.Manager.StartUnit string:"plymouth-quit.service" string:"replace"
 
+
+echo "Wait for X11..."
+pkill node
+
+while [ ! -e /tmp/.X11-unix/X${DISPLAY#*:} ]; do sleep 0.5; done
+
 sleep 1
 
-
 while true; do    
-    echo "Running"
     npm run start
+    echo "restart ... "
     sleep 60
 done

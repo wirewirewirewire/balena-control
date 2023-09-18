@@ -9,6 +9,7 @@ const express = require("express");
 const os = require("os");
 const { readFile, unlink } = require("fs").promises;
 const { spawn } = require("child_process");
+var control = require("./app/hwcontrol");
 
 var app = express();
 var app2 = express();
@@ -17,6 +18,8 @@ const httpServer = require("http").createServer(app);
 const httpServer2 = require("http").createServer(app2);
 
 var DEBUG = process.env.DEBUG != "true" ? false : true;
+var AUTOREBOOT = process.env.AUTOREBOOT != "true" ? false : true;
+
 var RUN_DRY = false;
 
 var PORT = process.env.CONTROL_PORT || 3009;
@@ -82,6 +85,23 @@ httpServer.listen(PORT, () => {
 httpServer2.listen(PORT2, () => {
   console.log("[Server] http screenshot api : " + httpServer2.address().address + ":" + PORT2 + "/screenshot");
 });
+
+init();
+
+async function init() {
+  control.init();
+  let displayCount = (await control.getDisplayCount()).data;
+  if (displayCount < 1) {
+    console.log("[MAIN] INIT - no display found");
+    if (AUTOREBOOT) {
+      console.log("[MAIN] Start projectors and reboot.");
+      await control.setBalenaWake();
+    }
+  } else {
+    console.log("[MAIN] INIT - display Count: " + displayCount);
+    //todo: anyway turn on displays here and setup xserver again
+  }
+}
 
 process.on("SIGINT", () => {
   console.log("Bye bye!");
