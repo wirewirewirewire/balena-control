@@ -37,7 +37,7 @@ BALENA_CONTROL_TOKEN=random_string
 
 ## Control
 
-`http://XXX.XXX.XXX.XXX:3009` is the local IP adress of your device. `3009` is the default port `balena-control` is running on.
+`http://XXX.XXX.XXX.XXX:3009` is the local IP address of your device. `3009` is the default port `balena-control` is running on.
 All Responses have the general structure to verify if the response is a success:
 
 ```json
@@ -68,7 +68,7 @@ GET http://XXX.XXX.XXX.XXX:3009/status
 ### Shutdown computer 📴
 
 > [!WARNING]  
-> This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers.
+> This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers. The Device needs to be powered on manually after this!
 
 Shuts down the computer.
 
@@ -85,7 +85,28 @@ POST http://XXX.XXX.XXX.XXX:3009/shutdown
 }
 ```
 
+### Wake computer
+
+Wake up the device from sleep. Turn on all the periphery and return to normal usage.
+
+```
+POST http://XXX.XXX.XXX.XXX:3009/wake
+```
+
+#### Returns
+
+```json
+{
+	[...]
+    "data": {
+        "status": "all devices awake"
+    }
+}
+```
+
 ### Sleep computer
+
+Sleep the computer and turn all the periphery off.
 
 ```
 POST http://XXX.XXX.XXX.XXX:3009/sleep
@@ -95,37 +116,10 @@ POST http://XXX.XXX.XXX.XXX:3009/sleep
 
 ```json
 {
-  "status": "prepare-sleep",
-  ...
-}
-```
-
-### Display 📺
-
-Use this to change the configuration of the display.
-
-```
-POST http://XXX.XXX.XXX.XXX:3009/display
-```
-
-```json
-[
-  {
-    "display": 0,
-    "status": "off"
-  }
-]
-```
-
-`display` the ID of the display
-`status` allows `on` and `off`
-
-#### Returns
-
-```json
-{
-  "display": "off",
-  ...
+	[...]
+    "data": {
+        "status": "all devices sleeping"
+    }
 }
 ```
 
