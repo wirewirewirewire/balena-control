@@ -210,22 +210,22 @@ def update_connection(uuid, method, ip, prefix, gateway, dns1, dns2):
         return True
 
 
-def reactivate(interface_name="eth0"):
-    bus = dbus.SystemBus()
-    proxy = bus.get_object("org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager")
-    nm = dbus.Interface(proxy, "org.freedesktop.NetworkManager")
-    devpath = nm.GetDeviceByIpIface(interface_name)
-    nm.ActivateConnection('/', devpath, '/')
-
-
 parser = argparse.ArgumentParser(description='Add connection via network manager')
 parser.add_argument('ip', type=str, help='ip address')
 parser.add_argument('cidr', type=int, help='cidr')
 parser.add_argument('gateway', type=str, help='gateway address')
 parser.add_argument('dns1', type=str, help='dns address 1')
 parser.add_argument('dns2', type=str, help='dns address 2')
+parser.add_argument('einterface', type=str, help='network interface')
 
 args = parser.parse_args()
+
+def reactivate(interface_name=args.einterface):
+    bus = dbus.SystemBus()
+    proxy = bus.get_object("org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager")
+    nm = dbus.Interface(proxy, "org.freedesktop.NetworkManager")
+    devpath = nm.GetDeviceByIpIface(interface_name)
+    nm.ActivateConnection('/', devpath, '/')
 
 print_connections()
 
