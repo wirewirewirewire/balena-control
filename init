@@ -7,9 +7,22 @@ DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket   dbus-send  
 echo "Wait for X11..."
 pkill node
 
-while [ ! -e /tmp/.X11-unix/X${DISPLAY#*:} ]; do sleep 0.5; done
-
 sleep 1
+
+
+
+if [[ -z "$CONF_IP" ]] || [[ -z "$CONF_GATEWAY" ]]; then
+    echo "Please set CONF_IP and CONF_GATEWAY to set static IP"
+else
+    : ${CONF_DNS1:=8.8.8.8}
+    : ${CONF_DNS2:=8.8.4.4}
+    : ${CONF_IFACE:=eth0}
+    python2 updateconnection.py $CONF_IP 24 $CONF_GATEWAY $CONF_DNS1 $CONF_DNS2 $CONF_IFACE
+fi
+
+#python2 updateconnection.py CONF_IP 24 CONF_GATEWAY CONF_DNS1 CONF_DNS2 CONF_IFACE
+
+while [ ! -e /tmp/.X11-unix/X${DISPLAY#*:} ]; do sleep 0.5; done
 
 while true; do    
     npm run start
