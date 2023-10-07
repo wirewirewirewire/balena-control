@@ -50,7 +50,7 @@ All Responses have the general structure to verify if the response is a success:
 
 The Return value describes the `data` property
 
-### Get status
+### Get status (WIP)
 
 ```
 GET http://XXX.XXX.XXX.XXX:3009/status
@@ -65,29 +65,9 @@ GET http://XXX.XXX.XXX.XXX:3009/status
 }
 ```
 
-### Shutdown computer 📴
-
-> [!WARNING]  
-> This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers. The Device needs to be powered on manually after this!
-
-Shuts down the computer.
-
-```
-POST http://XXX.XXX.XXX.XXX:3009/shutdown
-```
-
-#### Returns
-
-```json
-{
-  "status": "prepare-shutdown",
-  "display": "active"
-}
-```
-
 ### Wake computer
 
-Wake up the device from sleep. Turn on all the periphery and return to normal usage.
+Wake up the device from sleep. Turn on all the periphery and return to normal usage. This takes some time (1-5 minutes)
 
 ```
 POST http://XXX.XXX.XXX.XXX:3009/wake
@@ -120,6 +100,45 @@ POST http://XXX.XXX.XXX.XXX:3009/sleep
     "data": {
         "status": "all devices sleeping"
     }
+}
+```
+
+### Reboot computer
+
+reboot and reset the system completely.
+
+```
+POST http://XXX.XXX.XXX.XXX:3009/reboot
+```
+
+#### Returns
+
+```json
+{
+	[...]
+    "data": {
+        "status": "success"
+    }
+}
+```
+
+### Shutdown computer (experimental) 📴
+
+> [!WARNING]  
+> This will also shut down the network of Raspberry Pi computers, so it will not react to any WOL triggers. The Device needs to be powered off and on manually after this!
+
+Shut down the computer.
+
+```
+POST http://XXX.XXX.XXX.XXX:3009/shutdown
+```
+
+#### Returns
+
+```json
+{
+  "status": "prepare-shutdown",
+  "display": "active"
 }
 ```
 

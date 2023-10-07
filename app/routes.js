@@ -18,24 +18,38 @@ module.exports = function (app) {
     //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
     res.send({ success: true, error: status.Data, data: status.Data });
   });
+
   app.post("/reboot", async function (req, res) {
-    if (DEBUG) console.log("[API] post reboot");
+    console.log("[API] post reboot");
     var timeout;
     let status = await control.setBalenaRestart(timeout);
     //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
     res.send({ success: true, error: null, data: status.Data });
   });
   app.post("/sleep", async function (req, res) {
-    if (DEBUG) console.log("[API] post sleep");
+    console.log("[API] post sleep");
     let status = await control.setBalenaSleep();
     //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
     res.send({ success: true, error: null, data: { status } });
   });
   app.post("/wake", async function (req, res) {
-    if (DEBUG) console.log("[API] post wake");
+    console.log("[API] post wake");
     let status = await control.setBalenaWake();
     //let file = req.files[Object.keys(req.files)[0]].tempFilePath;
     res.send({ success: true, error: null, data: { status } });
+  });
+
+  app.get("/reboot", async function (req, res) {
+    console.log("[API] get reboot");
+    res.send({ success: true, error: null, data: true });
+  });
+  app.get("/sleep", async function (req, res) {
+    console.log("[API] get sleep");
+    res.send({ success: true, error: null, data: true });
+  });
+  app.get("/wake", async function (req, res) {
+    console.log("[API] get wake");
+    res.send({ success: true, error: null, data: true });
   });
 
   app.get("/display", async function (req, res) {
