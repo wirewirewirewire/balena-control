@@ -6,6 +6,7 @@ DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket   dbus-send  
 
 echo "Wait for X11..."
 pkill node
+service snmpd stop
 
 sleep 1
 
@@ -18,6 +19,7 @@ else
     : ${CONF_DNS2:=8.8.4.4}
     : ${CONF_IFACE:=eth0}
     python2 updateconnection.py $CONF_IP 24 $CONF_GATEWAY $CONF_DNS1 $CONF_DNS2 $CONF_IFACE
+    /usr/sbin/snmpd $CONF_IP
 fi
 
 #python2 updateconnection.py CONF_IP 24 CONF_GATEWAY CONF_DNS1 CONF_DNS2 CONF_IFACE

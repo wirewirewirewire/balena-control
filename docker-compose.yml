@@ -6,6 +6,7 @@ services:
     build: .
     restart: always
     privileged: true
+    network_mode: host
     devices:
       - /dev/dri
     group_add:
@@ -14,6 +15,8 @@ services:
       - 3009:3009
       - 3005:3005
       - 80:80
+      - "161:161/udp"
+      - "162:162/udp"
     volumes:
       - "xserver:/tmp/.X11-unix"
     labels:
