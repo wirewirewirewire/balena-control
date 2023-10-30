@@ -92,13 +92,19 @@ async function init() {
   control.init();
   let displayCount = (await control.getDisplayCount()).data;
   if (displayCount < 1) {
-    console.log("[MAIN] INIT - no display found");
     if (AUTOREBOOT) {
-      console.log("[MAIN] Start projectors and reboot.");
+      console.log("[MAIN] no display found - Start projectors and reboot.");
       await control.setBalenaWake();
+    } else {
+      console.log("[MAIN] INIT - no display found");
     }
   } else {
-    console.log("[MAIN] INIT - display Count: " + displayCount);
+    if (AUTOREBOOT) {
+      console.log("[MAIN] INIT - display Count: " + displayCount + " autoreboot enabled");
+    } else {
+      console.log("[MAIN] INIT - display Count: " + displayCount + " autoreboot disabled");
+    }
+
     //todo: anyway turn on displays here and setup xserver again
   }
 }
