@@ -6,10 +6,14 @@ module.exports = function (app) {
   app.get("/status", async function (req, res) {
     if (DEBUG) console.log("[API] get status");
     var balenaData = await control.getBalenaData();
-    var screenData = await control.getMonitorStatus();
-    var sleepState;
-    var displayState; //on,off,mixed
-    res.send({ success: true, error: null, data: { balenaData, screenData } });
+    var deviceName = await control.getBalenaName();
+    if (deviceName.hasOwnProperty("deviceName")) deviceName = deviceName.deviceName;
+    //var screenData = await control.getMonitorStatus();
+    var appName = process.env.BALENA_APP_NAME;
+    var deviceType = process.env.BALENA_DEVICE_TYPE;
+    var deviceUUID = process.env.BALENA_DEVICE_UUID;
+
+    res.send({ success: true, error: null, data: { balenaData, appName, deviceName, deviceType, deviceUUID } });
   });
   app.post("/shutdown", async function (req, res) {
     if (DEBUG) console.log("[API] post shutdown");

@@ -84,6 +84,27 @@ function getBalenaRelease() {
   });
 }
 
+function getBalenaName() {
+  return new Promise((resolve, reject) => {
+    exec(
+      'curl -X GET --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v2/device/name?apikey=$BALENA_SUPERVISOR_API_KEY"',
+      (error, stdout, stderr) => {
+        if (error) {
+          //console.log(`error: ${error.message}`);
+          resolve(false);
+          return;
+        }
+        if (stderr) {
+          //console.log(`stderr: ${stderr}`);
+          //resolve(stderr);
+          //return;
+        }
+        resolve(IsJsonString(stdout));
+      }
+    );
+  });
+}
+
 function pjlinkSet(ip, command) {
   return new Promise(async (resolve, reject) => {
     const projector = new PJLink(ip, 4352);
@@ -167,6 +188,12 @@ module.exports = {
   getBalenaData: async function () {
     return new Promise(async (resolve, reject) => {
       let result = await getBalenaRelease();
+      resolve(result);
+    });
+  },
+  getBalenaName: async function () {
+    return new Promise(async (resolve, reject) => {
+      let result = await getBalenaName();
       resolve(result);
     });
   },
