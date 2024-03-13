@@ -107,6 +107,7 @@ async function init() {
 
     //todo: anyway turn on displays here and setup xserver again
   }
+  console.log("[INIT] Balena Control is Running...");
 }
 
 process.on("SIGINT", () => {
