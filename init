@@ -18,7 +18,7 @@ else
     : ${CONF_DNS1:=8.8.8.8}
     : ${CONF_DNS2:=8.8.4.4}
     : ${CONF_IFACE:=eth0}
-    python2 updateconnection.py $CONF_IP 24 $CONF_GATEWAY $CONF_DNS1 $CONF_DNS2 $CONF_IFACE
+    python2 updateconnection.py $CONF_IP 24 $CONF_GATEWAY $CONF_DNS1 $CONF_DNS2 $CONF_IFACE > networkconfig.log
     /usr/sbin/snmpd $CONF_IP
 fi
 
