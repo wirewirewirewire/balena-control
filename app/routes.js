@@ -45,15 +45,15 @@ module.exports = function (app) {
 
   app.get("/reboot", async function (req, res) {
     console.log("[API] get reboot");
-    res.send({ success: true, error: null, data: true });
+    res.send({ success: false, error: "please use POST request", data: true });
   });
   app.get("/sleep", async function (req, res) {
     console.log("[API] get sleep");
-    res.send({ success: true, error: null, data: true });
+    res.send({ success: false, error: "please use POST request", data: true });
   });
   app.get("/wake", async function (req, res) {
     console.log("[API] get wake");
-    res.send({ success: true, error: null, data: true });
+    res.send({ success: false, error: "please use POST request", data: true });
   });
 
   app.get("/display", async function (req, res) {

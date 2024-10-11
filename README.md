@@ -48,7 +48,7 @@ All Responses have the general structure to verify if the response is a success:
 }
 ```
 
-The Return value describes the `data` property
+The Return value describes the `data` property. You can run all the commands from terminal like `curl -X POST http://localhost:3009/wake`
 
 ### Get status (WIP)
 
