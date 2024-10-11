@@ -108,26 +108,37 @@ function getBalenaName() {
 function pjlinkSet(ip, command) {
   return new Promise(async (resolve, reject) => {
     const projector = new PJLink(ip, 4352);
+    var timeout = setTimeout(() => {
+      console.log("[PJLINK] ERROR timeout sendig command: " + command + " to: " + ip);
+      resolve(false);
+      return;
+    }, 10000);
     if (command == "on") {
       projector.powerOn(function (err) {
         if (err) {
           console.log("[PJLINK] error turning on", err);
+          clearTimeout(timeout);
           resolve(false);
           return;
         }
         console.log("[PJLINK] turned on: " + ip);
+        clearTimeout(timeout);
         resolve(true);
+        return;
       });
     }
     if (command == "off") {
       projector.powerOff(function (err) {
         if (err) {
           console.log("[PJLINK] error turning on", err);
+          clearTimeout(timeout);
           resolve(false);
           return;
         }
-        console.log("[PJLINK] turned on: " + ip);
+        console.log("[PJLINK] turned off: " + ip);
+        clearTimeout(timeout);
         resolve(true);
+        return;
       });
     }
   });

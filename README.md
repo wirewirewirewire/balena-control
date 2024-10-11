@@ -142,6 +142,14 @@ POST http://XXX.XXX.XXX.XXX:3009/shutdown
 }
 ```
 
+
+
+### Debug
+
+#### Check PJLINK Connection
+
+To check if pjlink reacts on the projector you can use a simple netcat command: `echo '%1POWR ?' | nc 192.168.XXX.XXX 4352`. There should be a response like `POWR=0`.
+
 ### Screenshot 📸
 
 Enable `public device url`. Make sure you also have [xserver](https://github.com/wirewirewirewire/xserver) running. This will allow you to get a screenshot of the application currently running on the public device url.
