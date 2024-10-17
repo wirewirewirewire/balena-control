@@ -142,40 +142,68 @@ function pjlinkSet(ip, command) {
     }
     if (command == "status") {
       const powerstate = await new Promise((resolve, reject) => {
-        projector.getPowerState(function (state, data) {
-          console.log("TEST");
-          console.log(state);
-          console.log(data);
+        projector.getPowerState(function (err, state) {
+          if (err) {
+            console.log("[PJLINK] error getPowerState", err);
+            clearTimeout(timeout);
+            resolve("err");
+            return;
+          }
           resolve(state);
         });
       });
       const input = await new Promise((resolve, reject) => {
-        projector.getInput(function (state) {
-          console.log(state);
+        projector.getInput(function (err, state) {
+          if (err) {
+            console.log("[PJLINK] error getInput", err);
+            clearTimeout(timeout);
+            resolve("err");
+            return;
+          }
           resolve(state);
         });
       });
       const name = await new Promise((resolve, reject) => {
-        projector.getName(function (state) {
-          console.log(state);
+        projector.getName(function (err, state) {
+          if (err) {
+            console.log("[PJLINK] error getName", err);
+            clearTimeout(timeout);
+            resolve("err");
+            return;
+          }
           resolve(state);
         });
       });
       const manufacturer = await new Promise((resolve, reject) => {
-        projector.getName(function (state) {
-          console.log(state);
+        projector.getManufacturer(function (err, state) {
+          if (err) {
+            console.log("[PJLINK] error getManufacturer ", err);
+            clearTimeout(timeout);
+            resolve("err");
+            return;
+          }
           resolve(state);
         });
       });
       const model = await new Promise((resolve, reject) => {
-        projector.getName(function (state) {
-          console.log(state);
+        projector.getModel(function (err, state) {
+          if (err) {
+            console.log("[PJLINK] error getModel ", err);
+            clearTimeout(timeout);
+            resolve("err");
+            return;
+          }
           resolve(state);
         });
       });
       const info = await new Promise((resolve, reject) => {
-        projector.getInfo(function (state) {
-          console.log(state);
+        projector.getInfo(function (err, state) {
+          if (err) {
+            console.log("[PJLINK] error getInfo", err);
+            clearTimeout(timeout);
+            resolve("err");
+            return;
+          }
           resolve(state);
         });
       });
