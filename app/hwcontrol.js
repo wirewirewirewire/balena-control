@@ -141,6 +141,14 @@ function pjlinkSet(ip, command) {
         return;
       });
     }
+    if (command == "status") {
+      projector.getPowerState(function (state) {
+        console.log("[PJLINK] return power state(" + ip + "): " + state);
+        clearTimeout(timeout);
+        resolve(state);
+        return;
+      });
+    }
   });
 }
 
