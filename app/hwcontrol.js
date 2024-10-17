@@ -184,8 +184,8 @@ function pjlinkSet(ip, command) {
 
 module.exports = {
   init: async function () {
+    beamerArray = BEAMER_IP.split(",");
     if (beamerArray.length >= 1) {
-      beamerArray = BEAMER_IP.split(",");
       console.log("[INIT] projector defined: " + beamerArray);
       console.log("[INIT] PJLINK data:");
       for (let index = 0; index < beamerArray.length; index++) {
