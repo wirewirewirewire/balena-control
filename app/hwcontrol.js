@@ -142,8 +142,10 @@ function pjlinkSet(ip, command) {
     }
     if (command == "status") {
       const powerstate = await new Promise((resolve, reject) => {
-        projector.getPowerState(function (state) {
+        projector.getPowerState(function (state, data) {
+          console.log("TEST");
           console.log(state);
+          console.log(data);
           resolve(state);
         });
       });
@@ -180,7 +182,7 @@ function pjlinkSet(ip, command) {
 
       var stateArray = { powerstate, input, name, manufacturer, model, info };
 
-      console.log("[PJLINK] return state: " + stateArray);
+      console.log("[PJLINK] return state");
       clearTimeout(timeout);
       resolve(stateArray);
       return;
