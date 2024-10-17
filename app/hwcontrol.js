@@ -143,31 +143,37 @@ function pjlinkSet(ip, command) {
     if (command == "status") {
       const powerstate = await new Promise((resolve, reject) => {
         projector.getPowerState(function (state) {
+          console.log(state);
           resolve(state);
         });
       });
       const input = await new Promise((resolve, reject) => {
         projector.getInput(function (state) {
+          console.log(state);
           resolve(state);
         });
       });
       const name = await new Promise((resolve, reject) => {
         projector.getName(function (state) {
+          console.log(state);
           resolve(state);
         });
       });
       const manufacturer = await new Promise((resolve, reject) => {
         projector.getName(function (state) {
+          console.log(state);
           resolve(state);
         });
       });
       const model = await new Promise((resolve, reject) => {
         projector.getName(function (state) {
+          console.log(state);
           resolve(state);
         });
       });
       const info = await new Promise((resolve, reject) => {
         projector.getInfo(function (state) {
+          console.log(state);
           resolve(state);
         });
       });
