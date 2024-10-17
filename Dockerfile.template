@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	jq \
 	htop \
 	nmap \
+	netcat \
 	snmp snmpd \
 	dbus && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*

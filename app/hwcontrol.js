@@ -136,26 +136,67 @@ function pjlinkSet(ip, command) {
           return;
         }
         console.log("[PJLINK] turned off: " + ip);
-        clearTimeout(timeout);
         resolve(true);
         return;
       });
     }
     if (command == "status") {
-      projector.getPowerState(function (state) {
-        console.log("[PJLINK] return power state(" + ip + "): " + state);
-        clearTimeout(timeout);
-        resolve(state);
-        return;
+      const powerstate = await new Promise((resolve, reject) => {
+        projector.getPowerState(function (state) {
+          resolve(state);
+        });
       });
+      const input = await new Promise((resolve, reject) => {
+        projector.getInput(function (state) {
+          resolve(state);
+        });
+      });
+      const name = await new Promise((resolve, reject) => {
+        projector.getName(function (state) {
+          resolve(state);
+        });
+      });
+      const manufacturer = await new Promise((resolve, reject) => {
+        projector.getName(function (state) {
+          resolve(state);
+        });
+      });
+      const model = await new Promise((resolve, reject) => {
+        projector.getName(function (state) {
+          resolve(state);
+        });
+      });
+      const info = await new Promise((resolve, reject) => {
+        projector.getInfo(function (state) {
+          resolve(state);
+        });
+      });
+
+      var stateArray = { powerstate, input, name, manufacturer, model, info };
+
+      console.log("[PJLINK] return state: " + stateArray);
+      clearTimeout(timeout);
+      resolve(stateArray);
+      return;
     }
   });
 }
 
 module.exports = {
-  init: function () {
-    beamerArray = BEAMER_IP.split(",");
-    console.log("[INIT] Beamer defined: " + beamerArray);
+  init: async function () {
+    if (beamerArray.length >= 1) {
+      beamerArray = BEAMER_IP.split(",");
+      console.log("[INIT] projector defined: " + beamerArray);
+      console.log("[INIT] PJLINK data:");
+      for (let index = 0; index < beamerArray.length; index++) {
+        const element = beamerArray[index];
+        //await sendSerialProjector("7E3030303020310D", element); //power on optoma
+        var status = await pjlinkSet(element, "status");
+        console.log(status);
+      }
+    } else {
+      console.log("[INIT] NO projector defined");
+    }
   },
 
   setScreenPower: async function (powerState, screenNumber = 0, ddc = false) {
