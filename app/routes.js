@@ -12,8 +12,8 @@ module.exports = function (app) {
     var appName = process.env.BALENA_APP_NAME;
     var deviceType = process.env.BALENA_DEVICE_TYPE;
     var deviceUUID = process.env.BALENA_DEVICE_UUID;
-
-    res.send({ success: true, error: null, data: { balenaData, appName, deviceName, deviceType, deviceUUID } });
+    var pjlinkState = await control.getPjlinkState();
+    res.send({ success: true, error: null, data: { balenaData, appName, deviceName, deviceType, deviceUUID, pjlinkState } });
   });
   app.post("/shutdown", async function (req, res) {
     if (DEBUG) console.log("[API] post shutdown");

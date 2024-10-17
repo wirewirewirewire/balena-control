@@ -10,6 +10,7 @@ var DEBUG = process.env.DEBUG != "true" ? false : true;
 var BEAMER_IP = process.env.BEAMER_IP || "0.0.0.0";
 
 var beamerArray = [];
+var beamerPjLinkState;
 
 const delay = (time) => new Promise((res) => setTimeout(res, time));
 
@@ -196,10 +197,10 @@ function pjlinkSet(ip, command) {
           resolve(state);
         });
       });
-      const info = await new Promise((resolve, reject) => {
-        projector.getInfo(function (err, state) {
+      const error = await new Promise((resolve, reject) => {
+        projector.getErrors(function (err, state) {
           if (err) {
-            console.log("[PJLINK] error getInfo", err);
+            console.log("[PJLINK] error getErrors", err);
             clearTimeout(timeout);
             resolve("err");
             return;
@@ -208,7 +209,8 @@ function pjlinkSet(ip, command) {
         });
       });
 
-      var stateArray = { powerstate, input, name, manufacturer, model, info };
+      var stateArray = { powerstate, input, name, manufacturer, model, error };
+      beamerPjLinkState = stateArray; // add to global for later api calls
 
       console.log("[PJLINK] return state");
       clearTimeout(timeout);
@@ -285,6 +287,11 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       let result = await getBalenaRelease();
       resolve(result);
+    });
+  },
+  getPjlinkState: async function () {
+    return new Promise(async (resolve, reject) => {
+      resolve(beamerPjLinkState);
     });
   },
   getBalenaName: async function () {
