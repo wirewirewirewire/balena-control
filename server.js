@@ -96,7 +96,7 @@ async function init() {
   if (displayCount < 1) {
     if (AUTOREBOOT) {
       console.log("[MAIN] no display found - Start projectors and reboot.");
-      delay(15000);
+      await delay(15000);
       await control.setBalenaWake();
     } else {
       console.log("[MAIN] INIT - no display found");
