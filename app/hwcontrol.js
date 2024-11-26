@@ -230,7 +230,11 @@ module.exports = {
         for (let index = 0; index < beamerArray.length; index++) {
           const element = beamerArray[index];
           //await sendSerialProjector("7E3030303020310D", element); //power on optoma
-          var status = await pjlinkSet(element, "status");
+          for (let index = 0; index < 10; index++) {
+            var status = await pjlinkSet(element, "status");
+            if (status != false) break;
+            delay(2000);
+          }
           console.log(status);
         }
         resolve(true);
