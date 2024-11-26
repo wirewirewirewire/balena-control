@@ -47,6 +47,8 @@ app.use(express.urlencoded({ extended: true, limit: "20mb" }));
 // routes ======================================================================
 require("./app/routes.js")(app); // load our routes
 
+const delay = (time) => new Promise((res) => setTimeout(res, time));
+
 app2.get("/", async (req, res) => {
   console.log("[SCREENSHOT] Screenshot request received.");
   const fileName = process.hrtime.bigint() + ".png";
@@ -94,6 +96,7 @@ async function init() {
   if (displayCount < 1) {
     if (AUTOREBOOT) {
       console.log("[MAIN] no display found - Start projectors and reboot.");
+      delay(15000);
       await control.setBalenaWake();
     } else {
       console.log("[MAIN] INIT - no display found");
