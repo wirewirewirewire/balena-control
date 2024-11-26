@@ -89,7 +89,7 @@ httpServer2.listen(PORT2, () => {
 init();
 
 async function init() {
-  control.init();
+  await control.init();
   let displayCount = (await control.getDisplayCount()).data;
   if (displayCount < 1) {
     if (AUTOREBOOT) {

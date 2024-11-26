@@ -222,19 +222,23 @@ function pjlinkSet(ip, command) {
 
 module.exports = {
   init: async function () {
-    beamerArray = BEAMER_IP.split(",");
-    if (beamerArray.length >= 1) {
-      console.log("[INIT] projector defined: " + beamerArray);
-      console.log("[INIT] PJLINK data:");
-      for (let index = 0; index < beamerArray.length; index++) {
-        const element = beamerArray[index];
-        //await sendSerialProjector("7E3030303020310D", element); //power on optoma
-        var status = await pjlinkSet(element, "status");
-        console.log(status);
+    return new Promise(async (resolve, reject) => {
+      beamerArray = BEAMER_IP.split(",");
+      if (beamerArray.length >= 1) {
+        console.log("[INIT] projector defined: " + beamerArray);
+        console.log("[INIT] PJLINK data:");
+        for (let index = 0; index < beamerArray.length; index++) {
+          const element = beamerArray[index];
+          //await sendSerialProjector("7E3030303020310D", element); //power on optoma
+          var status = await pjlinkSet(element, "status");
+          console.log(status);
+        }
+        resolve(true);
+      } else {
+        console.log("[INIT] NO projector defined");
+        resolve(false);
       }
-    } else {
-      console.log("[INIT] NO projector defined");
-    }
+    });
   },
 
   setScreenPower: async function (powerState, screenNumber = 0, ddc = false) {
