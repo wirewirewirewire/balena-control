@@ -233,7 +233,7 @@ module.exports = {
           for (let index = 0; index < 10; index++) {
             var status = await pjlinkSet(element, "status");
             if (status != false) break;
-            delay(2000);
+            await delay(2000);
           }
           console.log(status);
         }
@@ -378,12 +378,14 @@ module.exports = {
         const element = beamerArray[index];
         //await sendSerialProjector("7E3030303020310D", element); //power on optoma
         await pjlinkSet(element, "on");
+        await delay(1000);
       }
       await execAwait("xset dpms force on");
       for (let index = 0; index < 5; index++) {
         await execAwait("DISPLAY=:0 xrandr --output DisplayPort-" + index + " --auto");
         await execAwait("DISPLAY=:0 xrandr --output HDMI-" + index + " --auto");
         await execAwait("ddcutil setvcp --display " + index + " D6 " + "01");
+        await delay(1000);
       }
       await this.setBalenaRestart();
 
