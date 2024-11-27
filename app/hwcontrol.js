@@ -7,6 +7,8 @@ const PJLink = require("pjlink");
 const { exec, spawn } = require("child_process");
 
 var DEBUG = process.env.DEBUG != "true" ? false : true;
+var WAITREBOOT = process.env.WAITREBOOT != "true" ? false : true;
+
 var BEAMER_IP = process.env.BEAMER_IP || "0.0.0.0";
 
 var beamerArray = [];
@@ -386,6 +388,10 @@ module.exports = {
         await execAwait("DISPLAY=:0 xrandr --output HDMI-" + index + " --auto");
         await execAwait("ddcutil setvcp --display " + index + " D6 " + "01");
         await delay(1000);
+      }
+      //if set wair for beamer init
+      if (WAITREBOOT) {
+        await delay(60000);
       }
       await this.setBalenaRestart();
 
