@@ -369,7 +369,7 @@ module.exports = {
         await execAwait("ddcutil setvcp --display " + index + " D6 " + "03");
       }
 
-      resolve("all devices sleeping");
+      resolve("[CONTROL] all devices sleeping");
     });
   },
   setBalenaWake: async function () {
@@ -391,7 +391,11 @@ module.exports = {
       }
       //if set wair for beamer init
       if (WAITREBOOT) {
+        console.log("[CONTROL] wait 60 sec for reboot (flag) ");
         await delay(60000);
+      } else {
+        console.log("[CONTROL] reboot device...");
+        await delay(5000);
       }
       await this.setBalenaRestart();
 
