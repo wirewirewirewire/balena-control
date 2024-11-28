@@ -49,10 +49,10 @@ function IsJsonString(str) {
 }
 function execAwait(command) {
   return new Promise((resolve, reject) => {
-    console.log("[RUN] " + command);
+    if (DEBUG) console.log("[RUN] " + command);
     exec(command, (error, stdout, stderr) => {
       if (error) {
-        console.log(`[RUN] error: ${error}`);
+        if (DEBUG) console.log(`[RUN] error: ${error}`);
         //resolve({ error: error, data: undefined });
         //return;
       }
@@ -119,7 +119,8 @@ function pjlinkSet(ip, command) {
     if (command == "on") {
       projector.powerOn(function (err) {
         if (err) {
-          console.log("[PJLINK] error turning on", err);
+          console.log("[PJLINK] error turning on");
+          if (DEBUG) console.log(err);
           clearTimeout(timeout);
           resolve(false);
           return;
@@ -133,12 +134,14 @@ function pjlinkSet(ip, command) {
     if (command == "off") {
       projector.powerOff(function (err) {
         if (err) {
-          console.log("[PJLINK] error turning on", err);
+          console.log("[PJLINK] error turning on");
+          if (DEBUG) console.log(err);
           clearTimeout(timeout);
           resolve(false);
           return;
         }
         console.log("[PJLINK] turned off: " + ip);
+        clearTimeout(timeout);
         resolve(true);
         return;
       });
@@ -147,10 +150,10 @@ function pjlinkSet(ip, command) {
       const powerstate = await new Promise((resolve, reject) => {
         projector.getPowerState(function (err, state) {
           if (err) {
-            console.log("[PJLINK] error getPowerState", err);
+            console.log("[PJLINK] error getPowerState");
+            if (DEBUG) console.log(err);
             clearTimeout(timeout);
             resolve("err");
-            return;
           }
           resolve(state);
         });
@@ -158,10 +161,10 @@ function pjlinkSet(ip, command) {
       const input = await new Promise((resolve, reject) => {
         projector.getInput(function (err, state) {
           if (err) {
-            console.log("[PJLINK] error getInput", err);
+            console.log("[PJLINK] error getInput");
+            if (DEBUG) console.log(err);
             clearTimeout(timeout);
             resolve("err");
-            return;
           }
           resolve(state);
         });
@@ -169,10 +172,10 @@ function pjlinkSet(ip, command) {
       const name = await new Promise((resolve, reject) => {
         projector.getName(function (err, state) {
           if (err) {
-            console.log("[PJLINK] error getName", err);
+            console.log("[PJLINK] error getName");
+            if (DEBUG) console.log(err);
             clearTimeout(timeout);
             resolve("err");
-            return;
           }
           resolve(state);
         });
@@ -180,10 +183,10 @@ function pjlinkSet(ip, command) {
       const manufacturer = await new Promise((resolve, reject) => {
         projector.getManufacturer(function (err, state) {
           if (err) {
-            console.log("[PJLINK] error getManufacturer ", err);
+            console.log("[PJLINK] error getManufacturer ");
+            if (DEBUG) console.log(err);
             clearTimeout(timeout);
             resolve("err");
-            return;
           }
           resolve(state);
         });
@@ -191,10 +194,10 @@ function pjlinkSet(ip, command) {
       const model = await new Promise((resolve, reject) => {
         projector.getModel(function (err, state) {
           if (err) {
-            console.log("[PJLINK] error getModel ", err);
+            console.log("[PJLINK] error getModel ");
+            if (DEBUG) console.log(err);
             clearTimeout(timeout);
             resolve("err");
-            return;
           }
           resolve(state);
         });
@@ -202,10 +205,10 @@ function pjlinkSet(ip, command) {
       const error = await new Promise((resolve, reject) => {
         projector.getErrors(function (err, state) {
           if (err) {
-            console.log("[PJLINK] error getErrors", err);
+            console.log("[PJLINK] error getErrors");
+            if (DEBUG) console.log(err);
             clearTimeout(timeout);
             resolve("err");
-            return;
           }
           resolve(state);
         });
@@ -356,7 +359,7 @@ module.exports = {
   setBalenaSleep: async function () {
     //todo: add timeout as delay
     return new Promise(async (resolve, reject) => {
-      console.log(beamerArray);
+      if (DEBUG) console.log(beamerArray);
       for (let index = 0; index < beamerArray.length; index++) {
         const element = beamerArray[index];
         //await sendSerialProjector("7E3030303020300D", element); //power off optoma
